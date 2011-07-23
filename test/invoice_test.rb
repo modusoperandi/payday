@@ -8,7 +8,7 @@ module Payday
           :notes => "These are some notes.",
           :line_items => [LineItem.new(:price => 10, :quantity => 3, :description => "Shirts")],
           :shipping_rate => 15.00, :shipping_description => "USPS Priority Mail:",
-          :tax_rate => 0.125, :tax_description => "Local Sales Tax, 12.5%")
+          :tax_rate => 0.125, :tax_description => "Local Sales Tax, 12.5%", :heading => "TAX INVOICE")
           
       assert_equal 20, i.invoice_number
       assert_equal "Here", i.bill_to
@@ -118,19 +118,19 @@ module Payday
       File.unlink("tmp/testing.pdf") if File.exists?("tmp/testing.pdf")
       assert !File.exists?("tmp/testing.pdf")
       
-      i = Invoice.new(:tax_rate => 0.1, :notes => "These are some crazy awesome notes!", :invoice_number => 12,
+      i = Invoice.new(:notes => "These are some crazy awesome notes!", :invoice_number => 12,
           :due_at => Date.civil(2011, 1, 22), #:paid_at => Date.civil(2012, 2, 22),
           :bill_to => "Alan Johnson\n101 This Way\nSomewhere, SC 22222", 
           :ship_to => "Frank Johnson\n101 That Way\nOther, SC 22229",
-          :invoice_details => {"Ordered By:" => "Alan Johnson", "Paid By:" => "Dude McDude"})
-      
-      Payday::Config.default.company_details = "10 This Way\nManhattan, NY 10001\n800-111-2222\nawesome@awesomecorp.com"
-      
+          :heading => "TAX INVOICE",
+          :invoice_details => {"Payment Term:" => "Pay withing 14 days"})
+      Payday::Config.default.company_details = "10 This Way\nManhattan, NY 10001\n800-111-2222\nawesome@awesomecorp.com\nGST Reg No: 200506074G"
+     
       3.times do
         i.line_items << LineItem.new(:price => 20, :quantity => 5, :description => "Pants")
         i.line_items << LineItem.new(:price => 10, :quantity => 3, :description => "Shirts")
-        i.line_items << LineItem.new(:price => 5, :quantity => 200, :description => "Hats")
       end
+      i.line_items << LineItem.new(:price => 0, :description => "GST 7%")
 
       i.render_pdf_to_file("tmp/testing.pdf")
       
@@ -138,7 +138,7 @@ module Payday
     end
     
     test "rendering to string" do
-      i = Invoice.new(:tax_rate => 0.1, :notes => "These are some crazy awesome notes!", :invoice_number => 12,
+      i = Invoice.new(:notes => "These are some crazy awesome notes!", :invoice_number => 12,
           :due_at => Date.civil(2011, 1, 22), :paid_at => Date.civil(2012, 2, 22),
           :bill_to => "Alan Johnson\n101 This Way\nSomewhere, SC 22222", :ship_to => "Frank Johnson\n101 That Way\nOther, SC 22229")
 
@@ -147,7 +147,7 @@ module Payday
         i.line_items << LineItem.new(:price => 10, :quantity => 3, :description => "Shirts")
         i.line_items << LineItem.new(:price => 5, :quantity => 200.0, :description => "Hats")
       end
-
+      
       refute_nil i.render_pdf
     end
   end

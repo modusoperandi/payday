@@ -20,9 +20,9 @@ module Payday
 
         # set up some default styling
         pdf.font_size(8)
-        
         stamp(invoice, pdf)
         company_banner(invoice, pdf)
+        heading(invoice, pdf)
         bill_to_ship_to(invoice, pdf)
         invoice_details(invoice, pdf)
         line_items_table(invoice, pdf)
@@ -32,6 +32,17 @@ module Payday
         page_numbers(pdf)
 
         pdf
+      end
+      
+      def self.heading(invoice, pdf)
+        if invoice.heading
+          pdf.float do
+            pdf.bounding_box([0, pdf.cursor], :width => pdf.bounds.width) do
+              pdf.text invoice.heading, :align => :center, :size => 25
+            end
+          end
+        end
+
       end
       
       def self.stamp(invoice, pdf)
@@ -88,7 +99,7 @@ module Payday
           table = pdf.make_table([[bold_cell(pdf, I18n.t('payday.invoice.ship_to', :default => "Ship To"))], 
               [invoice.ship_to]], :column_widths => [200], :cell_style => bill_to_cell_style)
           
-          pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], :width => table.width, :height => table.height + 2) do
+          pdf.bounding_box([pdf.bounds.width - table.width+50, pdf.cursor], :width => table.width, :height => table.height + 2) do
             table.draw
           end
         end
