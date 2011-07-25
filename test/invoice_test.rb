@@ -117,8 +117,9 @@ module Payday
     test "rendering to file" do
       File.unlink("tmp/testing.pdf") if File.exists?("tmp/testing.pdf")
       assert !File.exists?("tmp/testing.pdf")
-      
+      puts  
       i = Invoice.new(:notes => "These are some crazy awesome notes!", :invoice_number => 12,
+          :currency => "usd",
           :due_at => Date.civil(2011, 1, 22), #:paid_at => Date.civil(2012, 2, 22),
           :bill_to => "Alan Johnson\n101 This Way\nSomewhere, SC 22222", 
           :ship_to => "Frank Johnson\n101 That Way\nOther, SC 22229",
