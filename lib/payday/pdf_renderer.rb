@@ -55,7 +55,7 @@ module Payday
 
         if stamp
           pdf.bounding_box([150, pdf.cursor - 50], :width => pdf.bounds.width - 300) do
-            pdf.font("DejaVuSans") do
+            pdf.font("Helvetica-Bold") do
               pdf.fill_color "cc0000"
               pdf.text stamp, :align=> :center, :size => 25, :rotate => 15
             end
@@ -155,16 +155,18 @@ module Payday
       end
       
       def self.line_items_table(invoice, pdf)
-        table_data = []
-        table_data << [bold_cell(pdf, I18n.t('payday.line_item.description', :default => "Description"), :borders => []), 
-            bold_cell(pdf, I18n.t('payday.line_item.unit_price', :default => "Unit Price"), :align => :center, :borders => []), 
-            bold_cell(pdf, I18n.t('payday.line_item.quantity', :default => "Quantity"), :align => :center, :borders => []), 
-            bold_cell(pdf, I18n.t('payday.line_item.amount', :default => "Amount"), :align => :center, :borders => [])]
-        invoice.line_items.each do |line|
-          table_data << [line.description,
-                         (line.display_price || number_to_currency(line.price, invoice)),
-                         (line.display_quantity || BigDecimal.new(line.quantity.to_s).to_s("F")),
-                         number_to_currency(line.amount, invoice)]
+        pdf.font("#{Prawn::BASEDIR}/data/fonts/DejaVuSans.ttf") do
+          table_data = []
+          table_data << [bold_cell(pdf, I18n.t('payday.line_item.description', :default => "Description"), :borders => []), 
+              bold_cell(pdf, I18n.t('payday.line_item.unit_price', :default => "Unit Price"), :align => :center, :borders => []), 
+              bold_cell(pdf, I18n.t('payday.line_item.quantity', :default => "Quantity"), :align => :center, :borders => []), 
+              bold_cell(pdf, I18n.t('payday.line_item.amount', :default => "Amount"), :align => :center, :borders => [])]
+          invoice.line_items.each do |line|
+            table_data << [line.description,
+                           (line.display_price || number_to_currency(line.price, invoice)),
+                           (line.display_quantity || BigDecimal.new(line.quantity.to_s).to_s("F")),
+                           number_to_currency(line.amount, invoice)]
+          end
         end
 
         pdf.move_cursor_to(pdf.cursor - 20)
@@ -183,24 +185,26 @@ module Payday
       end
       
       def self.totals_lines(invoice, pdf)
-        table_data = []
-        table_data << [bold_cell(pdf, I18n.t('payday.invoice.subtotal', :default => "Subtotal:")), 
-            cell(pdf, number_to_currency(invoice.subtotal, invoice), :align => :right)]
-        if invoice.tax_rate > 0
-          table_data << [bold_cell(pdf,
-              invoice.tax_description.nil? ? I18n.t('payday.invoice.tax', :default => "Tax:") : invoice.tax_description), 
-              cell(pdf, number_to_currency(invoice.tax, invoice), :align => :right)]
-        end
-        if invoice.shipping_rate > 0
-          table_data << [bold_cell(pdf,
-              invoice.shipping_description.nil? ? I18n.t('payday.invoice.shipping', :default => "Shipping:") : invoice.shipping_description), 
-              cell(pdf, number_to_currency(invoice.shipping, invoice), :align => :right)]
-        end
-        table_data << [bold_cell(pdf, I18n.t('payday.invoice.total', :default => "Total:"), :size => 12), 
-            cell(pdf, number_to_currency(invoice.total, invoice), :size => 12, :align => :right)]
-        table = pdf.make_table(table_data, :cell_style => { :borders => [] })
-        pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], :width => table.width, :height => table.height + 2) do
-          table.draw
+        pdf.font("#{Prawn::BASEDIR}/data/fonts/DejaVuSans.ttf") do
+          table_data = []
+          table_data << [bold_cell(pdf, I18n.t('payday.invoice.subtotal', :default => "Subtotal:")), 
+              cell(pdf, number_to_currency(invoice.subtotal, invoice), :align => :right)]
+          if invoice.tax_rate > 0
+            table_data << [bold_cell(pdf,
+                invoice.tax_description.nil? ? I18n.t('payday.invoice.tax', :default => "Tax:") : invoice.tax_description), 
+                cell(pdf, number_to_currency(invoice.tax, invoice), :align => :right)]
+          end
+          if invoice.shipping_rate > 0
+            table_data << [bold_cell(pdf,
+                invoice.shipping_description.nil? ? I18n.t('payday.invoice.shipping', :default => "Shipping:") : invoice.shipping_description), 
+                cell(pdf, number_to_currency(invoice.shipping, invoice), :align => :right)]
+          end
+          table_data << [bold_cell(pdf, I18n.t('payday.invoice.total', :default => "Total:"), :size => 12), 
+              cell(pdf, number_to_currency(invoice.total, invoice), :size => 12, :align => :right)]
+          table = pdf.make_table(table_data, :cell_style => { :borders => [] })
+          pdf.bounding_box([pdf.bounds.width - table.width, pdf.cursor], :width => table.width, :height => table.height + 2) do
+            table.draw
+          end
         end
       end
       
