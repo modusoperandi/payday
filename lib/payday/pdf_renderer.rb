@@ -167,20 +167,20 @@ module Payday
                            (line.display_quantity || BigDecimal.new(line.quantity.to_s).to_s("F")),
                            number_to_currency(line.amount, invoice)]
           end
-        end
 
-        pdf.move_cursor_to(pdf.cursor - 20)
-        pdf.table(table_data, :width => pdf.bounds.width, :header => true, 
-            :cell_style => {:border_width => 0.5, :border_color => "cccccc", :padding => [5, 10]},
-            :row_colors => ["dfdfdf", "ffffff"]) do
-          # left align the number columns
-          columns(1..3).rows(1..row_length - 1).style(:align => :right)
+          pdf.move_cursor_to(pdf.cursor - 20)
+          pdf.table(table_data, :width => pdf.bounds.width, :header => true, 
+              :cell_style => {:border_width => 0.5, :border_color => "cccccc", :padding => [5, 10]},
+              :row_colors => ["dfdfdf", "ffffff"]) do
+            # left align the number columns
+            columns(1..3).rows(1..row_length - 1).style(:align => :right)
 
-          # set the column widths correctly
-          natural = natural_column_widths
-          natural[0] = width - natural[1] - natural[2] - natural[3]
+            # set the column widths correctly
+            natural = natural_column_widths
+            natural[0] = width - natural[1] - natural[2] - natural[3]
 
-          column_widths = natural
+            column_widths = natural
+          end
         end
       end
       
