@@ -6,25 +6,27 @@ module Payday
     
     attr_accessor :invoice_number, :bill_to, :ship_to, :notes, :line_items, :shipping_rate, :shipping_description,
                   :tax_rate, :tax_description, :due_at, :paid_at, :currency, :invoice_details, :heading
+                  
+    has_attached_file :pdf_invoice, :styles => { :thumb => { :geometry => "141x200>", :format => :jpg } }
     
     def initialize(options =  {})
-      self.invoice_number = options[:invoice_number] || nil
-      self.bill_to = options[:bill_to] || nil
-      self.ship_to = options[:ship_to] || nil
-      self.notes = options[:notes] || nil
-      self.line_items = options[:line_items] || []
-      self.shipping_rate = options[:shipping_rate] || nil
+      self.invoice_number       = options[:invoice_number] || nil
+      self.bill_to              = options[:bill_to] || nil
+      self.ship_to              = options[:ship_to] || nil
+      self.notes                = options[:notes] || nil
+      self.line_items           = options[:line_items] || []
+      self.shipping_rate        = options[:shipping_rate] || nil
       self.shipping_description = options[:shipping_description] || nil
-      self.tax_rate = options[:tax_rate] || nil
-      self.tax_description = options[:tax_description] || nil
-      self.due_at = options[:due_at] || nil
-      self.paid_at = options[:paid_at] || nil
-      self.currency = options[:currency] || nil
-      self.invoice_details = options[:invoice_details] || []
-      self.heading = options[:heading] || nil 
+      self.tax_rate             = options[:tax_rate] || nil
+      self.tax_description      = options[:tax_description] || nil
+      self.due_at               = options[:due_at] || nil
+      self.paid_at              = options[:paid_at] || nil
+      self.currency             = options[:currency] || nil
+      self.invoice_details      = options[:invoice_details] || []
+      self.heading              = options[:heading] || nil 
     end
     
-    # The tax rate that we're applying, as a BigDecimal    
+    # The tax rate that we're applying, as a BigDecimal
     def tax_rate=(value)
       @tax_rate = BigDecimal.new(value.to_s)
     end

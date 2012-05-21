@@ -60,12 +60,12 @@ module Payday::Invoiceable
   
   # Renders this invoice to pdf as a string
   def render_pdf
-    Payday::PdfRenderer.render(self)
+    #Payday::PdfRenderer.render(self)
   end
   
   # Renders this invoice to pdf
   def render_pdf_to_file(path)
-    Payday::PdfRenderer.render_to_file(self, path)
+    #Payday::PdfRenderer.render_to_file(self, path)
   end
   
   # Iterates through the details on this invoiceable. The block given should accept

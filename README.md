@@ -6,11 +6,11 @@ Installing
 ===
 Payday is available as a Rubygem, so installing it is as easy as running:
 
-    gem install payday
+    gem install payday-htmltopdf
 
 Or, using bundler:
 
-    gem "payday"
+    gem "payday-htmltopdf"
 
 
 Using Payday
@@ -46,8 +46,6 @@ Using Payday with ActiveRecord Objects (or any other objects, for that matter)
 Payday focuses on two main objects, an invoice and a line item, so to use Payday with ActiveRecord you'll want to create your own classes for those objects. We include the Payday::Invoiceable and Payday::LineItemable modules to help out with that.
 
 Thanks to the work of Andrew Nordman, Payday includes a Rails generator that makes it super simple to generate the necessary models and migration for wiring Payday up to your app. Run `rails generate payday:setup --help` for more information about using the generator.
-
-For a bit more fleshed out example, be sure to check out [http://github.com/commondream/payday-example](http://github.com/commondream/payday-example).
 
 Rendering Payday PDFs To The Web
 ===
@@ -96,12 +94,6 @@ Payday uses the i18n gem to provide support for custom labels and internationali
 If you translate the invoice to your own language, please send me a copy of your locale.yml file so that we can include it with
 the main Payday distribution and other Payday users can enjoy the fruits of your labor.
 
-Examples
-===
-Here's an [example PDF Invoice](https://github.com/downloads/commondream/payday/example.pdf)
-
-There's also an example Rails application running on Heroku at [http://payday-example.heroku.com](http://payday-example.heroku.com). You can check out the source at [http://github.com/commondream/payday-example](http://github.com/commondream/payday-example).
-
 Contributing
 ===
 Payday is pretty young, so there's still a good bit of work to be done. I highly recommend sending me a message on GitHub before making too many changes, just to make sure that two folks aren't doing the same work, but beyond that feel free to fork the project, make some changes, and send a pull request. If you're unsure about what to work on but would like to help, send me a message on GitHub. I'd love the help!
@@ -116,28 +108,9 @@ We've had some awesome contributers:
 * Jim Jones ([aantix](https://github.com/aantix))
 * Hussein Morsy ([husseinmorsy](https://github.com/husseinmorsy))
 
-To Do
-===
-Here's what we're planning on working on with Payday in the near future:
-
-* Actually get a designer to style the invoices.
-* Add support for Money values
-* Add support for blank line items
-* Add support for indented line items
-* Apply different tax rates to different line items
-* Add support for shipping either pre or post tax
-* Add ability to show skus or product ids on each line item
-* Add ability to add fine print to invoices.
-
-* Ability to render invoice to html for web viewing
-
-Acknowledgements
-===
-This wouldn't be possible without the amazing [Prawn](http://prawn.majesticseacreature.com) gem and the team behind it.
-
 License
 ===
-Copyright (C) 2011 by Alan Johnson
+Copyright (C) 2011-2012 by Alan Johnson, Frank Wambutt
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
